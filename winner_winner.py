@@ -7,13 +7,23 @@ from time import sleep
 
 def display_title():
     os.system('clear')
-    print("\t***********************************************")
-    print("\t***************  WINNER WINNER  ***************")
-    print("\t***********************************************")
+    print("\t           .---.           .---.")
+    print("\t          /. ./|          /. ./|")
+    print("\t      .--'.  ' ;      .--'.  ' ; ")
+    print("\t     /__./ \ : |     /__./ \ : |")
+    print("\t .--'.  '   \: . .--'.  '   \: .")
+    print("\t/___/ \ |    ' '/___/ \ |    ' ' ")
+    print("\t;   \  \;      :;   \  \;      : ")
+    print("\t \   ;  `      | \   ;  `      | ")
+    print("\t  .   \    .\  ;  .   \    .\  ;")
+    print("\t   \   \   ' \ |   \   \   ' \ | ")
+    print("\t    :   '  |--'     :   '  |--'  ")
+    print("\t     \   \ ;         \   \ ;    ")
+    print("\t      '---' inner     '---' inner")
+    print("\t___________________________________")
 
 
 def main_user_input():
-    os.system('clear')
     # display user choices
     print("\n[1] Display all giveaways")
     print("[2] Select givaway to add entries or complete")
@@ -45,7 +55,7 @@ def load_giveaway_entries(chosen_giveaway):
         return []
 
 
-def prev_giveaways_menu():
+def giveaways_menu():
     for index, giveaway in enumerate(giveaways):
         print("\n[%d] %s" % (index, giveaway))
     user_selection = input("Enter your selection: ")
@@ -70,6 +80,7 @@ def quit():
         file_object = open('giveaways.pydata', 'wb')
         pickle.dump(giveaways, file_object)
         file_object.close()
+        print("\nThanks!")
     except Exception as e:
         print(e)
 
@@ -88,7 +99,11 @@ while choice != 'q':
         display_giveaways()
 
     elif choice == '2':
-        prev_giveaways_menu()
+        giveaways_menu()
 
     elif choice == '3':
         add_giveaway_menu()
+    elif choice == 'q':
+        quit()
+    else:
+        print("\nI didn't understand that choice (>_<)\n")
