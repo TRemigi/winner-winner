@@ -79,6 +79,7 @@ def update_giveaway():
                 print("\n[f] Finished")
                 print("[n] Not Finished")
                 print("[x] Cancel - New entries will be lost")
+                verify_entries = ''
                 verify_entries = input(
                     "\nFinish and add these entries to giveaway?")
                 if verify_entries == 'f':
@@ -123,6 +124,8 @@ def display_giveaways():
 
 
 def quit():
+    print(giveaways)
+    sleep(5)
     try:
         file_object = open('giveaways.pydata', 'wb')
         pickle.dump(giveaways, file_object)
