@@ -21,13 +21,15 @@ def display_title():
     print("\t     \   \ ;         \   \ ;    ")
     print("\t      '---' inner     '---' inner")
     print("\t___________________________________")
+    print("\n")
 
 
 def main_user_input():
+    display_title()
     # display user choices
     print("\n[1] Display all giveaways")
-    print("[2] Select givaway to add entries or complete")
-    print("[3] Add new giveaway")
+    print("[2] Add new giveaway")
+    print("[3] Add entries or end a giveaway")
     print("[q] Quit")
 
     return input("Enter your selection: ")
@@ -41,7 +43,7 @@ def load_giveaways():
         return giveaways
     except Exception as e:
         print(e)
-        return []
+        return {}
 
 
 def load_giveaway_entries(chosen_giveaway):
@@ -55,23 +57,64 @@ def load_giveaway_entries(chosen_giveaway):
         return []
 
 
-def giveaways_menu():
-    for index, giveaway in enumerate(giveaways):
-        print("\n[%d] %s" % (index, giveaway))
-    user_selection = input("Enter your selection: ")
-    selected_giveaway = giveaways[user_selection]
-    print("\n%s" % selected_giveaway)
+def update_giveaway():
+    giveaways_list = []
+    for giveaway in giveaways.keys():
+        giveaways_list.append(giveaway)
+    for index, giveaway_name in enumerate(giveaways_list):
+        print("\n[%d] %s" % (index, giveaway_name.title()))
+    user_input = input("Choose a giveaway to update: ")
+    selected_giveaway = giveaways_list[int(user_input)]
+    try:
+        display_title()
+        print("Updating: %s" % selected_giveaway)
+        for entry in giveaways[selected_giveaway]:
+            print(entry)
+        new_entries = []
+        new_entry = ''
+        while new_entry != "done":
+            new_entry = get_new_entry(new_entries)
+            if new_entry == "done":
+                for entry in new_entries:
+                    print(entry)
+                print("\n[y] Finished")
+                print("[n] Not Finished")
+                print("[x] Cancel - New entries will be lost")
+                verify_entries = input(
+                    "\nFinish and add these entries to giveaway?")
+                if verify_entries == 'y':
+                    for entry in new_entries:
+                        giveaways[selected_giveaway].append(entry)
+                        main_user_input()
+                elif verify_entries == 'n':
+                    get_new_entry()
+                else:
+                    main_user_input()
+    except Exception as e:
+        print(e)
 
 
-def add_giveaway_menu():
+def get_new_entry(new_entries):
+    os.system('clear')
+    for entry in new_entries:
+        print(entry)
+    new_entry = input(
+        '"\nType a name to add to entries: ')
+    if new_entry != "done":
+        new_entries.append(new_entry)
+    return new_entry
+
+
+def new_giveaway_menu():
     # ask user to add new giveaway
     new_giveaway = input("Enter a name for the new giveaway: ")
-    giveaways.append(new_giveaway)
+    giveaways[new_giveaway.lower()] = []
 
 
 def display_giveaways():
     for giveaway in giveaways:
-        print("\n%s" % giveaway)
+        entrants_num = len(giveaways[giveaway])
+        print("\n%s - %d Entrants" % (giveaway.title(), entrants_num))
     input("\nPress Enter to return: ")
 
 
@@ -97,12 +140,10 @@ while choice != 'q':
     display_title()
     if choice == '1':
         display_giveaways()
-
     elif choice == '2':
-        giveaways_menu()
-
+        new_giveaway_menu()
     elif choice == '3':
-        add_giveaway_menu()
+        update_giveaway()
     elif choice == 'q':
         quit()
     else:
