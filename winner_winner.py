@@ -62,44 +62,48 @@ def update_giveaway():
     for giveaway in giveaways.keys():
         giveaways_list.append(giveaway)
     for index, giveaway_name in enumerate(giveaways_list):
-        print("\n[%d] %s" % (index, giveaway_name.title()))
+        print("[%d] %s" % (index, giveaway_name.title()))
     user_input = input("Choose a giveaway to update: ")
     selected_giveaway = giveaways_list[int(user_input)]
     try:
         display_title()
-        print("Updating: %s" % selected_giveaway)
         for entry in giveaways[selected_giveaway]:
             print(entry)
         new_entries = []
         new_entry = ''
         while new_entry != "done":
-            new_entry = get_new_entry(new_entries)
+            new_entry = get_new_entry(new_entries, selected_giveaway)
             if new_entry == "done":
                 for entry in new_entries:
                     print(entry)
-                print("\n[y] Finished")
+                print("\n[f] Finished")
                 print("[n] Not Finished")
                 print("[x] Cancel - New entries will be lost")
                 verify_entries = input(
                     "\nFinish and add these entries to giveaway?")
-                if verify_entries == 'y':
+                if verify_entries == 'f':
                     for entry in new_entries:
                         giveaways[selected_giveaway].append(entry)
-                        main_user_input()
                 elif verify_entries == 'n':
-                    get_new_entry()
+                    new_entry = get_new_entry(new_entries, selected_giveaway)
                 else:
-                    main_user_input()
+                    break
     except Exception as e:
         print(e)
 
 
-def get_new_entry(new_entries):
-    os.system('clear')
+def get_new_entry(new_entries, selected_giveaway):
+    display_title()
+    print("Updating: %s" % selected_giveaway.title())
+    print("\nExisting Entries:")
+    for entry in giveaways[selected_giveaway]:
+        print(entry.title())
+    print("\nNew entries:")
     for entry in new_entries:
-        print(entry)
+        print(entry.title())
+    print("\nType a name to enter into the giveaway.")
     new_entry = input(
-        '"\nType a name to add to entries: ')
+        "Enter 'done' when finished: ")
     if new_entry != "done":
         new_entries.append(new_entry)
     return new_entry
@@ -114,7 +118,7 @@ def new_giveaway_menu():
 def display_giveaways():
     for giveaway in giveaways:
         entrants_num = len(giveaways[giveaway])
-        print("\n%s - %d Entrants" % (giveaway.title(), entrants_num))
+        print("%s - %d Entries" % (giveaway.title(), entrants_num))
     input("\nPress Enter to return: ")
 
 
